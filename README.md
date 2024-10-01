@@ -1,14 +1,14 @@
 # nomi_api
  A Nomi API Example written in Python.
 
- This is a really, really basic implementation around the Nomi AI API. It implements a simple chat program, but hopefully in such a way as to make the nomi module easy to use in future projects. This is **NOT** a beginner friendly project. You need to be able to use the command line and preferrebly have experience with Git.
+ This is a really, really basic implementation around the Nomi AI API. It implements a simple chat program, but hopefully in such a way as to make the nomi module easy to use in future projects. This is **NOT** a beginner friendly project. You need to be able to use the command line and preferebly have experience with Git.
 
 
  ## Getting Started
 You need to have a recent version of Python installed. I think 3.7 or later should do it. If you don't have Python you can download it at [Download Python | Python.org](https://www.python.org/downloads/). This project doesn't require any additional Python software, just what comes with the base install.
 
 ## Downloading the Code
-Once you have Python set up, download this repository by following the instructions at [Downloading source code archives - GitHub Docs](https://docs.github.com/en/repositories/working-with-files/using-files/downloading-source-code-archives#). Extract this to a directory and navigate to it on the command line. You should be able to run the example programe with `> python main.py`
+Once you have Python set up, download this repository by following the instructions at [Downloading source code archives - GitHub Docs](https://docs.github.com/en/repositories/working-with-files/using-files/downloading-source-code-archives#). Extract this to a directory and navigate to it on the command line. You should be able to run the example program with `> python main.py`
 
  ## Setup
  To use this, please create a file called .env_vars.json with the following contents:
