@@ -30,4 +30,4 @@
 # For more information, please refer to <https://unlicense.org>
 
 # If using a webhook from https://webhook.site, populate the UUID here
-WEBHOOK_UUID = "44aa9f5f-ed6c-41c9-9e71-a5c6911c86f7"
+WEBHOOK_UUID = None
