@@ -1,7 +1,7 @@
 # =============================================================================
 # ===================== nomi_information_requests.py ==========================
 # =============================================================================
-# ======== Used for managing a Nomi's information (Shared Notes etc) ==========
+# ================ Used for managing a Nomi's information =====================
 # =============================================================================
 #
 # This is free and unencumbered software released into the public domain.
