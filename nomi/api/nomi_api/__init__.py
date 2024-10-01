@@ -4,13 +4,6 @@
 # ================== Initialises the low-level API module =====================
 # =============================================================================
 #
-# This information was found by reverse engineering Nomi.AI's public
-# API. This activity is in direct contravention to Nomi.AI's Terms of Use.
-#
-# The information here may be incomplete, incorrect, or downright stupid.
-# USE THIS INFORMATION AT YOUR OWN RISK. You may be banned and lose access
-# to your Nomis. Don't be an idiot. Don't ruin things for others. Be a
-# good human.
 #
 # This is free and unencumbered software released into the public domain.
 #
