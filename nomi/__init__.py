@@ -34,4 +34,4 @@ from nomi.session import Session
 
 __all__ = ['Nomi',
            'Session',
-        ]
+         ]

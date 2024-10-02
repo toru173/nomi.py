@@ -34,4 +34,4 @@ from nomi.api.base_api.base_api_session import BaseSession
 
 __all__ = ['BaseRequests',
            'BaseSession',
-        ]
+         ]

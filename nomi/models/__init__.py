@@ -35,4 +35,5 @@ from nomi.models.session_model import SessionModel
 
 __all__ = ['NomiModel',
            'MessageModel',
-           'SessionModel']
+           'SessionModel',
+        ]

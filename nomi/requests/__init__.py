@@ -34,4 +34,4 @@ from nomi.requests.nomi_information_requests import NomiInformationRequests
 
 __all__ = ['MessageRequests',
            'NomiInformationRequests',
-        ]
+         ]
