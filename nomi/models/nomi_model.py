@@ -93,4 +93,6 @@ class NomiModel(BaseModel):
         for variable_name, key in nomi._response_json_keys.items():
             if key in nomi_json:
                 setattr(nomi, f"_{variable_name}", nomi_json[key])
-            else: raise RuntimeError(f"Unable to get {key} from JSON")
+            else:
+                print(nomi_json)
+                raise RuntimeError(f"Unable to get {key} from JSON")

@@ -26,30 +26,51 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from nomi.requests.base_nomi_requests import BaseNomiRequests
-from nomi.api.nomi_api.nomi_api_session import NomiSession
-from nomi.api.nomi_api.nomi_api_endpoints import *
+from __future__ import annotations
 
-class NomiInformationRequests(BaseNomiRequests):
+from nomi.models.base_model import BaseModel
 
-    _nomis_json_key = "nomis"
+class ErrorModel(BaseModel):
 
-    def __init__(self, session: NomiSession) -> None:
-        super().__init__(session)
+    _issues_json_key = "issues"
+
+    _response_json_keys = {
+        "type" : "type",
+        "issues" : _issues_json_key,
+    }
+
+    def __init__(self, *args, **kwargs):
+        raise RuntimeError("Use 'ErrorModel.from_json()' instead of directly calling __init__")
+    
+    @property
+    def type(self) -> str:
+        return self._type
+    
+    @property
+    def issues(self) -> str:
+        return self._issues
+    
+    @classmethod
+    def from_json(cls, json: dict) -> ErrorModel:       
+        message = ErrorModel.__new__(cls)
+        message._parse_json(json)
+
+        return message
+    
+    def _parse_json(error: ErrorModel, error_json: dict) -> None:
+        if not type(error) is ErrorModel:
+            raise TypeError(f"Expected error to be a ErrorModel, got a {type(error)}")
         
-    def get_all_nomis(self) -> dict:
-        response_json = self.session.do_request(endpoint = GET_ALL_NOMIS)
-        print(response_json)
-        if not self._nomis_json_key in response_json: raise RuntimeError("Unable to decode response from JSON")
-        return response_json[self._nomis_json_key]
-        
-    def get_nomi_information(self, nomi_id: str = None) -> dict:
-        if not isinstance(nomi_id, str):
-            raise TypeError("nomi_id must be an str")
-        
-        url_parameters = {
-            "nomi_id" : nomi_id
-        }
+        if type(error_json) is str:
+            try: error_json = error_json.loads(message_json)
+            except error_json.JSONDecodeError: raise RuntimeError("Unable to decode response from JSON")
 
-        response = self.session.do_request(endpoint = GET_NOMI_INFORMATION, url_parameters = url_parameters)
-        return response
+        if not type(error_json) is dict:
+            raise TypeError(f"Expected json to be a dict, got a {type(error_json)}")
+
+        for variable_name, key in error_json._response_json_keys.items():
+            if key in error_json: setattr(error, f"_{variable_name}", error_json[key])
+            else:
+                if key is not error._issues_json_key:
+                    raise RuntimeError(f"Unable to get {key} from JSON")
+                setattr(error, f"_{error._issues_json_key}", None)
