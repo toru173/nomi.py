@@ -1,9 +1,3 @@
-# =============================================================================
-# ============================= base_model.py =================================
-# =============================================================================
-# == Represents the base Nomi API Object. All other objects extend this class =
-# =============================================================================
-#
 # Copyright (c) 2024-present toru173 and contributors
 #
 # Redistribution and use in source and binary forms, with or without 

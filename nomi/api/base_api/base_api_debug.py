@@ -1,9 +1,3 @@
-# =============================================================================
-# ============================ base_api_debug.py ==============================
-# =============================================================================
-# ===== When attempting to debug API access, add a webhook.site UUID here =====
-# =============================================================================
-#
 # Copyright (c) 2024-present toru173 and contributors
 #
 # Redistribution and use in source and binary forms, with or without 
