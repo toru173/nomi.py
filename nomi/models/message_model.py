@@ -34,7 +34,6 @@ from __future__ import annotations
 from nomi.models.base_model import BaseModel
 from nomi.models.session_model import Session
 
-from typing import Dict
 from datetime import datetime
 
 class MessageModel(BaseModel):
@@ -61,7 +60,7 @@ class MessageModel(BaseModel):
         return self._sent
     
     @classmethod
-    def from_json(cls, json: Dict) -> MessageModel:       
+    def from_json(cls, json: dict) -> MessageModel:       
         message = MessageModel.__new__(cls)
         message._parse_json(json)
 

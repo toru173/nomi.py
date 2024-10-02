@@ -29,12 +29,13 @@
 #
 # For more information, please refer to <https://unlicense.org>
 
-# We're defaulting to simple HTTP/1.1 for now, though in production the
-# API uses HTTP/2. This is just a proof of concept, so let's see if it works
+
+from __future__ import annotations
+
 import http.client
 import socket
 
-from typing import Optional, Dict, List, Tuple, Any
+from typing import Optional, List, Tuple, Any
 
 try: from nomi.api.base_api.base_api_debug import WEBHOOK_UUID
 except: WEBHOOK_UUID = None
@@ -64,14 +65,14 @@ class BaseSession:
             "PATCH" : self._do_PATCH
         }
 
-    def _get_default_headers(self) -> Dict[str, str]:
+    def _get_default_headers(self) -> dict[str, str]:
         # Absolutely minimal headers in base class
         return {
                 "Host" : self.host,
                 "Accept-Encoding" : "identity"
         }
 
-    def _do_GET(self, url: str, headers: Optional[Dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Tuple[int, List[Tuple[str, str]], Optional[bytes]]:
+    def _do_GET(self, url: str, headers: Optional[dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Tuple[int, List[Tuple[str, str]], Optional[bytes]]:
         if not isinstance(url, str): raise TypeError("url must be a str")
         if headers is not None and not isinstance(headers, dict): raise TypeError("headers must be a dictionary or None")
         if expected_status is not None and not isinstance(expected_status, int): raise TypeError("expected_status must be a integer or None")
@@ -107,10 +108,10 @@ class BaseSession:
         else:
             return status, headers, response_body
         
-    def _do_HEAD(self, url: str, headers: Optional[Dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Tuple[int, List[Tuple[str, str]], Optional[bytes]]:
+    def _do_HEAD(self, url: str, headers: Optional[dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Tuple[int, List[Tuple[str, str]], Optional[bytes]]:
         raise NotImplementedError("HEAD requests are not implemented")
 
-    def _do_POST(self, url: str, headers: Optional[Dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Tuple[int, List[Tuple[str, str]], Optional[bytes]]:
+    def _do_POST(self, url: str, headers: Optional[dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Tuple[int, List[Tuple[str, str]], Optional[bytes]]:
         if not isinstance(url, str): raise TypeError("url must be a str")
         if headers is not None and not isinstance(headers, dict): raise TypeError("headers must be a dictionary or None")
         if body is not None and not isinstance(body, str): raise TypeError("body must be a string or None")        
@@ -151,7 +152,7 @@ class BaseSession:
         else:
             return status, headers, response_body
     
-    def _do_PUT(self, url: str, headers: Optional[Dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Tuple[int, List[Tuple[str, str]], Optional[bytes]]:
+    def _do_PUT(self, url: str, headers: Optional[dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Tuple[int, List[Tuple[str, str]], Optional[bytes]]:
         if not isinstance(url, str): raise TypeError("url must be a str")
         if headers is not None and not isinstance(headers, dict): raise TypeError("headers must be a dictionary or None")
         if body is not None and not isinstance(body, str): raise TypeError("body must be a string or None")
@@ -190,7 +191,7 @@ class BaseSession:
         else:
             return status, headers, response_body
 
-    def _do_DELETE(self, url: str, headers: Optional[Dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Tuple[int, List[Tuple[str, str]], Optional[bytes]]:
+    def _do_DELETE(self, url: str, headers: Optional[dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Tuple[int, List[Tuple[str, str]], Optional[bytes]]:
         if not isinstance(url, str): raise TypeError("url must be a str")
         if headers is not None and not isinstance(headers, dict): raise TypeError("headers must be a dictionary or None")
         if expected_status is not None and not isinstance(expected_status, int): raise TypeError("expected_status must be a integer or None")
@@ -227,16 +228,16 @@ class BaseSession:
         else:
             return status, headers, response_body
 
-    def _do_CONNECT(self, url: str, headers: Optional[Dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Tuple[int, List[Tuple[str, str]], Optional[bytes]]:
+    def _do_CONNECT(self, url: str, headers: Optional[dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Tuple[int, List[Tuple[str, str]], Optional[bytes]]:
         NotImplementedError("CONNECT requests are not implemented")
 
-    def _do_OPTIONS(self, url: str, headers: Optional[Dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Tuple[int, List[Tuple[str, str]], Optional[bytes]]:
+    def _do_OPTIONS(self, url: str, headers: Optional[dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Tuple[int, List[Tuple[str, str]], Optional[bytes]]:
         raise NotImplementedError("OPTIONS requests are not implemented")
 
-    def _do_TRACE(self, url: str, headers: Optional[Dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Tuple[int, List[Tuple[str, str]], Optional[bytes]]:
+    def _do_TRACE(self, url: str, headers: Optional[dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Tuple[int, List[Tuple[str, str]], Optional[bytes]]:
         raise NotImplementedError("TRACE requests are not implemented")
 
-    def _do_PATCH(self, url: str, headers: Optional[Dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Tuple[int, List[Tuple[str, str]], Optional[bytes]]:
+    def _do_PATCH(self, url: str, headers: Optional[dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Tuple[int, List[Tuple[str, str]], Optional[bytes]]:
         raise NotImplementedError("PATCH requests are not implemented")
 
     def _do_request(self, method: str, *args, **kwargs) -> Tuple[int, List[Tuple[str, str]], Optional[bytes]]:
@@ -249,9 +250,9 @@ class BaseSession:
             return request(*args, **kwargs)
         except KeyError: raise ValueError(f"Unknown method: {method}")
         
-    def do_request(self, endpoint: Dict[str, any], url_parameters: Optional[Dict[str, Any]] = None, payload: Optional[Any] = None) -> Tuple[int, List[Tuple[str, str]], Optional[bytes]]:
-        if not isinstance(endpoint, Dict): raise TypeError("endpoint must be a dictory of the form {str, any}")
-        if url_parameters is not None and not isinstance(url_parameters, Dict):
+    def do_request(self, endpoint: dict[str, any], url_parameters: Optional[dict[str, Any]] = None, payload: Optional[Any] = None) -> Tuple[int, List[Tuple[str, str]], Optional[bytes]]:
+        if not isinstance(endpoint, dict): raise TypeError("endpoint must be a dictory of the form {str, any}")
+        if url_parameters is not None and not isinstance(url_parameters, dict):
             raise TypeError("url_parameters must be a dictory of the form {str, any}")
 
         try: method = endpoint["method"]

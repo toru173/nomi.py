@@ -29,8 +29,10 @@
 #
 # For more information, please refer to <https://unlicense.org>
 
+from __future__ import annotations
+from typing import Optional, Union, List, Any
+
 import json
-from typing import Optional, Union, Dict, List, Any
 
 from nomi.api.base_api.base_api_session import BaseSession
 
@@ -47,7 +49,7 @@ class NomiSession(BaseSession):
                          use_webhook_for_all = use_webhook_for_all,
                          use_webhook_for_POST_PUT_DELETE = use_webhook_for_POST_PUT_DELETE)
 
-    def _get_default_headers(self) -> Dict[str, str]:
+    def _get_default_headers(self) -> dict[str, str]:
         headers = super()._get_default_headers()
         if self._api_token is None: raise TypeError("api_token cannot be None")
         
@@ -55,7 +57,7 @@ class NomiSession(BaseSession):
 
         return headers
     
-    def _do_GET(self, url: str, headers: Optional[Dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Union[dict, bytes, None]:
+    def _do_GET(self, url: str, headers: Optional[dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Union[dict, bytes, None]:
         status, headers, body = super()._do_GET(url, headers, expected_status)
 
         # Check for JSON in the response
@@ -66,7 +68,7 @@ class NomiSession(BaseSession):
         else:
             return body  
     
-    def _do_POST(self, url: str, headers: Optional[Dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Union[dict, List[Any], bytes, None]:
+    def _do_POST(self, url: str, headers: Optional[dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Union[dict, List[Any], bytes, None]:
         # In most cases we're sending JSON to the API, so default to that
         if headers is None:
             headers = self._get_default_headers()
@@ -82,7 +84,7 @@ class NomiSession(BaseSession):
         else:
             return body    
     
-    def _do_PUT(self, url: str, headers: Optional[Dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Union[dict, bytes, None]:
+    def _do_PUT(self, url: str, headers: Optional[dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Union[dict, bytes, None]:
         # In most cases we're sending JSON to the API, so default to that
         if headers is None:
             headers = self._get_default_headers()
@@ -98,7 +100,7 @@ class NomiSession(BaseSession):
         else:
             return body
 
-    def _do_DELETE(self, url: str, headers: Optional[Dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Union[dict, bytes, None]:
+    def _do_DELETE(self, url: str, headers: Optional[dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Union[dict, bytes, None]:
         status, headers, body = super()._do_DELETE(url, headers, expected_status)
 
         # Check for JSON in the response
@@ -109,12 +111,12 @@ class NomiSession(BaseSession):
         else:
             return body
     
-    def _do_file_upload(self, url: str, headers: Optional[Dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Union[dict, bytes, None]:
+    def _do_file_upload(self, url: str, headers: Optional[dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Union[dict, bytes, None]:
         raise NotImplementedError("File upload is not implemented")
 
     def _do_request(self, method: str, *args, **kwargs) -> Union[dict, bytes, None]:
         return super()._do_request(method, *args, **kwargs)
 
-    def do_request(self, endpoint: Dict[str, any], url_parameters: Optional[Dict[str, Any]] = None, payload: Optional[Any] = None) -> Union[dict, bytes, None]:
+    def do_request(self, endpoint: dict[str, any], url_parameters: Optional[dict[str, Any]] = None, payload: Optional[Any] = None) -> Union[dict, bytes, None]:
         return super().do_request(endpoint = endpoint, url_parameters = url_parameters, payload = payload)
     

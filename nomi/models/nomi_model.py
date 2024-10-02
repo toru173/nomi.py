@@ -34,7 +34,7 @@ from __future__ import annotations
 from nomi.models.base_model import BaseModel
 from nomi.models.session_model import Session
 
-from typing import Dict, Union
+from typing import Union
 from datetime import datetime
 
 import json
@@ -77,7 +77,7 @@ class NomiModel(BaseModel):
         return self._relationship_type
     
     @classmethod
-    def from_json(cls, nomi_json: Dict) -> NomiModel:
+    def from_json(cls, nomi_json: dict) -> NomiModel:
         nomi_model = NomiModel.__new__(cls)
         nomi_model._parse_json(nomi_json)
 

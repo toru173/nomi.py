@@ -31,8 +31,6 @@
 
 from __future__ import annotations
 
-from typing import Dict
-
 from nomi.models.nomi_model import NomiModel
 from nomi.models.message_model import MessageModel
 
@@ -61,7 +59,7 @@ class Nomi(NomiModel):
         return nomi
     
     @classmethod
-    def from_json(cls, nomi_json: Dict) -> Nomi:
+    def from_json(cls, nomi_json: dict) -> Nomi:
         nomi = Nomi.__new__(cls)
         nomi._parse_json(nomi_json)
         return nomi
