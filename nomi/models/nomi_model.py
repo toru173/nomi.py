@@ -30,14 +30,13 @@
 # For more information, please refer to <https://unlicense.org>
 
 from __future__ import annotations
-
-from nomi.models.base_model import BaseModel
-from nomi.models.session_model import Session
-
 from typing import Union
 from datetime import datetime
 
 import json
+
+from nomi.models.base_model import BaseModel
+from nomi.models.session_model import Session
 
 class NomiModel(BaseModel):
 

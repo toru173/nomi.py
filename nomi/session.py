@@ -29,11 +29,11 @@
 #
 # For more information, please refer to <https://unlicense.org>
 
+from typing import Optional, List
+
 from nomi.api.nomi_api.nomi_api_session import NomiSession
 from nomi.requests.nomi_information_requests import NomiInformationRequests
 from nomi.models.nomi_model import NomiModel
-
-from typing import Optional, List
 
 class Session(NomiSession):
     def __init__(self, api_token: Optional[str] = None, use_webhook_for_all: bool = False, use_webhook_for_POST_PUT_DELETE: bool = False) -> None:

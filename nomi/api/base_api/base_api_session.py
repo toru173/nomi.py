@@ -29,13 +29,11 @@
 #
 # For more information, please refer to <https://unlicense.org>
 
-
 from __future__ import annotations
+from typing import Optional, List, Tuple, Any
 
 import http.client
 import socket
-
-from typing import Optional, List, Tuple, Any
 
 try: from nomi.api.base_api.base_api_debug import WEBHOOK_UUID
 except: WEBHOOK_UUID = None

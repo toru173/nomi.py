@@ -39,8 +39,6 @@ from nomi.requests.nomi_information_requests import NomiInformationRequests
 
 from nomi.session import Session
 
-import json
-
 class Nomi(NomiModel):
 
     _sent_message_key = "sentMessage"

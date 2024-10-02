@@ -30,11 +30,10 @@
 # For more information, please refer to <https://unlicense.org>
 
 from __future__ import annotations
+from datetime import datetime
 
 from nomi.models.base_model import BaseModel
 from nomi.models.session_model import Session
-
-from datetime import datetime
 
 class MessageModel(BaseModel):
 
