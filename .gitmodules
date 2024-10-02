@@ -1,0 +1,3 @@
+[submodule "nomi/api/base_api"]
+	path = nomi/api/base_api
+	url = https://github.com/toru173/base_api.py.git
