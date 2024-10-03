@@ -40,6 +40,7 @@ NOMI_API_ERRORS = {
     "MessageLengthLimitExceeded" : "The provided messageText is too long. Maximum message length is 400 for free accounts and 600 for users with a subscription.",
     "LimitExceeded" : "Cannot send the message because the user has exhausted their daily message quota.",
     "InvalidBody" : "Issue will be detailed in the errors.issues key, but there is an issue with the request body. This can happen if the messageText key is missing, the wrong type, or an empty string.",
+    "TooManyRequests" : "Use of the Nomi.ai API is subject to rate limits, but they are generous and should not affect normal use. If you hit the rate limit, you will receive a 429 Too Many Requests response.",
 }
 
 # Maps Nomi API errors to PEP8 variable names
@@ -55,4 +56,5 @@ NOMI_API_JSON_KEYS = {
     "message_length_limit_exceeded" : "MessageLengthLimitExceeded",
     "limit_exceeded" : "LimitExceeded",
     "invalid_body" : "InvalidBody",
+    "too_many_requests" : "TooManyRequests",
 }

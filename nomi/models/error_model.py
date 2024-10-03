@@ -34,7 +34,7 @@ class ErrorModel(BaseModel):
 
     _issues_json_key = "issues"
 
-    _response_json_keys = {
+    _json_keys = {
         "type" : "type",
         "issues" : _issues_json_key,
     }
@@ -52,25 +52,6 @@ class ErrorModel(BaseModel):
     
     @classmethod
     def from_json(cls, json: dict) -> ErrorModel:       
-        message = ErrorModel.__new__(cls)
-        message._parse_json(json)
-
-        return message
-    
-    def _parse_json(error: ErrorModel, error_json: dict) -> None:
-        if not type(error) is ErrorModel:
-            raise TypeError(f"Expected error to be a ErrorModel, got a {type(error)}")
-        
-        if type(error_json) is str:
-            try: error_json = error_json.loads(message_json)
-            except error_json.JSONDecodeError: raise RuntimeError("Unable to decode response from JSON")
-
-        if not type(error_json) is dict:
-            raise TypeError(f"Expected json to be a dict, got a {type(error_json)}")
-
-        for variable_name, key in error_json._response_json_keys.items():
-            if key in error_json: setattr(error, f"_{variable_name}", error_json[key])
-            else:
-                if key is not error._issues_json_key:
-                    raise RuntimeError(f"Unable to get {key} from JSON")
-                setattr(error, f"_{error._issues_json_key}", None)
+        error = ErrorModel.__new__(cls)
+        error._parse_json(json)
+        return error

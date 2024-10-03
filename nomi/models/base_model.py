@@ -26,6 +26,30 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+from __future__ import annotations
+
+from typing import Union
+import json
+
 class BaseModel:
     def __init__(self, *args, **kwargs) -> None:
         raise NotImplementedError
+    
+    def _parse_json(object: BaseModel, json_dict: Union[dict, str]) -> None:
+        if not isinstance(object, BaseModel):
+            raise TypeError(f"Expected object to be an instance of a BaseModel, got a {type(error)}")
+    
+        if type(json_dict) is str:
+            try:
+                json_dict = json.loads(json_dict)
+            except json.JSONDecodeError:
+                raise RuntimeError("Unable to parse json to JSON")
+
+        if not type(json_dict) is dict:
+            raise TypeError(f"Expected json to be a dict, got a {type(json_dict)}")
+
+        for variable_name, key in object._json_keys.items():
+            if key in json_dict:
+                setattr(object, f"_{variable_name}", json_dict[key])
+            else:
+                raise RuntimeError(f"Unable to get {key} from JSON")

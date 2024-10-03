@@ -49,7 +49,7 @@ if __name__ == "__main__":
     api_token = env_vars["api_token"]
 
     # 1 Create a Session object
-    session = Session(api_token = api_token)
+    session = Session(api_token = api_token, use_webhook_for_POST_PUT_DELETE=False)
     
     for nomi in session.nomis:
         print(f"Name: {nomi.name}")

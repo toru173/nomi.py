@@ -37,7 +37,7 @@ from nomi.models.session_model import Session
 
 class NomiModel(BaseModel):
 
-    _response_json_keys = {
+    _json_keys = {
         "uuid" : "uuid",
         "gender" : "gender",
         "name" : "name",
@@ -76,23 +76,4 @@ class NomiModel(BaseModel):
     def from_json(cls, nomi_json: dict) -> NomiModel:
         nomi_model = NomiModel.__new__(cls)
         nomi_model._parse_json(nomi_json)
-
         return nomi_model
-    
-    def _parse_json(nomi: NomiModel, nomi_json: Union[dict, str]) -> None:
-        if not isinstance(nomi, NomiModel):
-            raise TypeError(f"Expected nomi to be a NomiModel, got a {type(nomi)}")
-        
-        if type(nomi_json) is str:
-            try: nomi_json = json.loads(nomi_json)
-            except json.JSONDecodeError: raise RuntimeError("Unable to decode response from JSON")
-
-        if not type(nomi_json) is dict:
-            raise TypeError(f"Expected json to be a dict, got a {type(nomi_json)}")
-
-        for variable_name, key in nomi._response_json_keys.items():
-            if key in nomi_json:
-                setattr(nomi, f"_{variable_name}", nomi_json[key])
-            else:
-                print(nomi_json)
-                raise RuntimeError(f"Unable to get {key} from JSON")

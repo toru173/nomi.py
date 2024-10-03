@@ -34,7 +34,7 @@ from nomi.models.session_model import Session
 
 class MessageModel(BaseModel):
 
-    _response_json_keys = {
+    _json_keys = {
         "uuid" : "uuid",
         "text" : "text",
         "sent" : "sent",
@@ -59,21 +59,4 @@ class MessageModel(BaseModel):
     def from_json(cls, json: dict) -> MessageModel:       
         message = MessageModel.__new__(cls)
         message._parse_json(json)
-
         return message
-    
-    def _parse_json(message: MessageModel, message_json: dict) -> None:
-        if not type(message) is MessageModel:
-            raise TypeError(f"Expected message to be a Message, got a {type(message)}")
-        
-        if type(message_json) is str:
-            try: message_json = message_json.loads(message_json)
-            except message_json.JSONDecodeError: raise RuntimeError("Unable to decode response from JSON")
-
-        if not type(message_json) is dict:
-            raise TypeError(f"Expected json to be a dict, got a {type(message_json)}")
-
-        for variable_name, key in message._response_json_keys.items():
-            if key in message_json: setattr(message, f"_{variable_name}", message_json[key])
-            else:
-                raise RuntimeError(f"Unable to get {key} from JSON")
