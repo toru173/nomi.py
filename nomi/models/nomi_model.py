@@ -9,9 +9,9 @@
 # * Redistributions in binary form must reproduce the above copyright notice, 
 #   this list of conditions and the following disclaimer in the documentation 
 #   and/or other materials provided with the distribution.
-# * Neither the name of InterDigital Communications, Inc nor the names of its 
-#   contributors may be used to endorse or promote products derived from this 
-#   software without specific prior written permission.
+# * Neither the name of the copyright holder nor the names of its contributors
+#   may be used to endorse or promote products derived from this software
+#   without specific prior written permission.
 #
 # NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY 
 # THIS LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
@@ -29,8 +29,6 @@
 from __future__ import annotations
 from typing import Union
 from datetime import datetime
-
-import json
 
 from nomi.models.base_model import BaseModel
 from nomi.models.session_model import Session
