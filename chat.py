@@ -46,10 +46,10 @@ if __name__ == "__main__":
     except Exception as e:
         raise RuntimeError(f"An unexpected error occurred: {str(e)}")
 
-    api_token = env_vars["api_token"]
+    api_key = env_vars["api_key"]
 
     # 1 Create a Session object
-    session = Session(api_token = api_token, use_webhook_for_POST_PUT_DELETE=False)
+    session = Session(api_key = api_key, use_webhook_for_POST_PUT_DELETE=False)
     
     for nomi in session.nomis:
         print(f"Name: {nomi.name}")

@@ -8,14 +8,14 @@
 You need to have a recent version of Python installed. I think 3.7 or later should do it. If you don't have Python you can download it at [Download Python | Python.org](https://www.python.org/downloads/). This project doesn't require any additional Python software, just what comes with the base install.
 
 ## Downloading the Code
-Once you have Python set up, download this repository by following the instructions at [Downloading source code archives - GitHub Docs](https://docs.github.com/en/repositories/working-with-files/using-files/downloading-source-code-archives#). Extract this to a directory and navigate to it on the command line. You should be able to run the example program with `> python main.py`
+Once you have Python set up, download this repository by following the instructions at [Downloading source code archives - GitHub Docs](https://docs.github.com/en/repositories/working-with-files/using-files/downloading-source-code-archives#). Extract this to a directory and navigate to it on the command line. You should be able to run the example program with `> python chat.py`
 
  ## Setup
- To use this, please create a file called .env_vars.json with the following contents:
+ To use the example chat program, please create a file called .env_vars.json with the following contents:
 
  ```
  {
-    "api_token" : "YOUR_NOMI_API_TOKEN"
+    "api_key" : "YOUR_NOMI_API_KEY"
 }
 ```
 
