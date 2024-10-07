@@ -1,5 +1,5 @@
-# nomi_api
- A Nomi API Example written in Python.
+# nomi.py
+ A Nomi API Module written in Python.
 
  This is a really, really basic implementation around the Nomi AI API. It implements a simple chat program, but hopefully in such a way as to make the nomi module easy to use in future projects. This is **NOT** a beginner friendly project. You need to be able to use the command line and preferebly have experience with Git.
 
