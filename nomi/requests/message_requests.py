@@ -46,8 +46,8 @@ class MessageRequests(BaseNomiRequests):
         if not isinstance(message, str):
             raise TypeError("message must be a str")
         
-        if len(message) > self._max_message_length:
-            raise ValueError(f"message must be less than {self._max_message_length} characters long")
+        # if len(message) > self._max_message_length:
+        #     raise ValueError(f"message must be less than {self._max_message_length} characters long")
         
         url_parameters = {
             "nomi_id" : nomi_id
