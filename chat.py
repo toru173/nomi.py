@@ -49,7 +49,7 @@ if __name__ == "__main__":
     api_key = env_vars["api_key"]
 
     # 1 Create a Session object
-    session = Session(api_key = api_key, use_webhook_for_POST_PUT_DELETE=False)
+    session = Session(api_key = api_key)
     
     for nomi in session.nomis:
         print(f"Name: {nomi.name}")
@@ -71,7 +71,7 @@ if __name__ == "__main__":
     print(f"Now chatting with {nomi_name}. Press ctrl+c to stop")
 
     # 2 Create a Nomi object
-    nomi = Nomi.from_uuid(session = session, uuid = nomi_uuid)
+    
 
     while True:
         message = input("User: ")
