@@ -41,22 +41,13 @@ class Nomi(NomiModel):
     _sent_message_key = "sentMessage"
     _reply_message_key = "replyMessage"
 
-    def __init__(self) -> None:
-        raise RuntimeError("Use 'Nomi.from_uuid()' instead of directly calling __init__")
-
     @classmethod
     def from_uuid(cls, session: Session, uuid: str) -> Nomi:
-        nomi_json = session._nomi_information_requests.get_nomi_information(uuid)
-        nomi = Nomi.from_json(nomi_json)
+        response_json = session._nomi_information_requests.get_nomi_information(uuid)
+        nomi = Nomi(response_json)
         nomi._session = session
         nomi._message_requests = MessageRequests(session = nomi._session)
         nomi._nomi_information_requests = NomiInformationRequests(session = nomi._session)
-        return nomi
-    
-    @classmethod
-    def from_json(cls, nomi_json: dict) -> Nomi:
-        nomi = Nomi.__new__(cls)
-        nomi._parse_json(nomi_json)
         return nomi
 
     def send_message(self, message: str) -> dict:
@@ -64,8 +55,8 @@ class Nomi(NomiModel):
 
         response_json = self._message_requests.send_message(nomi_id = self.uuid, message = message)
 
-        sent_message = MessageModel.from_json(response_json[self._sent_message_key])
-        message_reply = MessageModel.from_json(response_json[self._reply_message_key])
+        sent_message = MessageModel(response_json[self._sent_message_key])
+        message_reply = MessageModel(response_json[self._reply_message_key])
 
         return sent_message, message_reply
         

@@ -27,18 +27,18 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from nomi.models.base_model import BaseModel
-from nomi.api.nomi_api import NomiSession as Session
+from nomi.api import NomiSession as Session
 
 class SessionModel(BaseModel):
-    def __init__(self, api_token: str) -> None:
-        if not type(api_token) is str:
-            raise TypeError(f"Expected api_token to be a str, got a {type(api_token)}")
+    def __init__(self, api_key: str) -> None:
+        if not type(api_key) is str:
+            raise TypeError(f"Expected api_key to be a str, got a {type(api_key)}")
 
-        self._session = Session(api_token = api_token)
+        self._session = Session(api_key = api_key)
 
     @property
-    def api_token(self) -> str:
-        return self._api_token
+    def api_key(self) -> str:
+        return self._api_key
     
     @property
     def session(self) -> Session:

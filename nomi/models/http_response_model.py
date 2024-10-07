@@ -26,6 +26,27 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from nomi.api.nomi_api import NomiSession
+from __future__ import annotations
+from typing import Union
 
-__all__ = ['NomiSession']
+from nomi.models.base_model import BaseModel
+
+class HTTPResponseModel(BaseModel):
+
+    _json_keys = {
+        "status" : "status",
+        "headers" : "headers",
+        "body" : "body",
+    }
+    
+    @property
+    def status(self) -> int:
+        return self._status
+    
+    @property
+    def headers(self) -> dict:
+        return self._headers
+    
+    @property
+    def body(self) -> Union[dict, bytes, None]:
+        return self._body

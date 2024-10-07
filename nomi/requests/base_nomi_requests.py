@@ -26,12 +26,59 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from nomi.api.base_api.base_api_requests import BaseSession
-from nomi.api.nomi_api.nomi_api_session import NomiSession
-from nomi.api.nomi_api.nomi_api_endpoints import *
+from __future__ import annotations
+from typing import Union, Optional, Any
 
-class BaseNomiRequests(BaseSession):
+from nomi.api import NomiSession
+from nomi.models.http_response_model import HTTPResponseModel
+
+class BaseNomiRequests:
+
+    _nomi_api_errors = {
+        "InvalidAPIKey" : "There is an issue with your API key",
+        "NomiNotFound" : "The specified Nomi was not found. It may not exist or may not be associated with this account.",
+        "InvalidRouteParams" : "The id parameter is not a valid UUID.",
+        "InvalidContentType" : "The Content-Type header is not application/json.",
+        "NoReply" : "The Nomi did not reply to the message. This is rare but will occur if there is a server issue or if the nomi does not respond within 15 seconds.",
+        "NomiStillResponding" : "The Nomi is already replying a user message (either made through the UI or a different API call) and so cannot reply to this message.",
+        "NomiNotReady" : "Immediately after the creation of a Nomi, there is a short period of several seconds before it is possible to send messages.",
+        "OngoingVoiceCallDetected" : "The Nomi is currently in a voice call and cannot respond to messages.",
+        "MessageLengthLimitExceeded" : "The provided messageText is too long. Maximum message length is 400 for free accounts and 600 for users with a subscription.",
+        "LimitExceeded" : "Cannot send the message because the user has exhausted their daily message quota.",
+        "InvalidBody" : "Issue will be detailed in the errors.issues key, but there is an issue with the request body. This can happen if the messageText key is missing, the wrong type, or an empty string.",
+        "TooManyRequests" : "Use of the Nomi.ai API is subject to rate limits, but they are generous and should not affect normal use. If you hit the rate limit, you will receive a 429 Too Many Requests response.",
+    }
+    
     def __init__(self, session: NomiSession) -> None:
-        if not isinstance(session, NomiSession): raise TypeError("session must be a NomiSession object")
+        if not isinstance(session, NomiSession):
+            raise TypeError("session must be a NomiSession object")
         
-        self.session = session  
+        self._session = session
+
+    def do_request(self, endpoint: dict[str, any], url_parameters: Optional[dict[str, Any]] = None, payload: Optional[Any] = None) -> Union[dict, bytes, None]:
+        status, headers, body = self._session.do_request(endpoint = endpoint,
+                                                         url_parameters = url_parameters,
+                                                         payload = payload
+                                                    )
+
+        response = HTTPResponseModel({
+            "status" : status,
+            "headers" : headers,
+            "body" : body,
+        })
+
+        if "error" in response.body:
+            error_type = response.body.get("error").get("type")
+            error_message = self._nomi_api_errors.get(error_type)
+            raise RuntimeError(error_message)        
+
+        expected_status = endpoint.get("expected_status")
+
+        if status != expected_status:
+            raise BaseNomiError(f"Unexpected response from API. Expected {expected_status}, got {status}")
+
+        return response
+    
+class BaseNomiError(RuntimeError):
+    # Base class for Nomi API-specific errors
+    pass

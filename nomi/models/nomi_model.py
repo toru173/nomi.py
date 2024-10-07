@@ -42,9 +42,6 @@ class NomiModel(BaseModel):
         "created" : "created",
         "relationship_type" : "relationshipType"
     }
-
-    def __init__(self) -> None:
-        raise RuntimeError("Use 'NomiModel.from_json()' instead of directly calling __init__")
         
     @property
     def session(self) -> Session:
@@ -69,9 +66,3 @@ class NomiModel(BaseModel):
     @property
     def relationship_type(self) -> str:
         return self._relationship_type
-    
-    @classmethod
-    def from_json(cls, nomi_json: dict) -> NomiModel:
-        nomi_model = NomiModel.__new__(cls)
-        nomi_model._parse_json(nomi_json)
-        return nomi_model

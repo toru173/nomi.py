@@ -30,7 +30,6 @@ from __future__ import annotations
 from datetime import datetime
 
 from nomi.models.base_model import BaseModel
-from nomi.models.session_model import Session
 
 class MessageModel(BaseModel):
 
@@ -39,9 +38,6 @@ class MessageModel(BaseModel):
         "text" : "text",
         "sent" : "sent",
     }
-
-    def __init__(self, *args, **kwargs):
-        raise RuntimeError("Use 'MessageModel.from_json()' instead of directly calling __init__")
     
     @property
     def uuid(self) -> str:
@@ -54,9 +50,3 @@ class MessageModel(BaseModel):
     @property
     def sent(self) -> datetime:
         return self._sent
-    
-    @classmethod
-    def from_json(cls, json: dict) -> MessageModel:       
-        message = MessageModel.__new__(cls)
-        message._parse_json(json)
-        return message

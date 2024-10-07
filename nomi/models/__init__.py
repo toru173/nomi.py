@@ -29,8 +29,12 @@
 from nomi.models.nomi_model import NomiModel
 from nomi.models.message_model import MessageModel
 from nomi.models.session_model import SessionModel
+from nomi.models.error_model import ErrorModel
+from nomi.models.http_response_model import HTTPResponseModel
 
 __all__ = ['NomiModel',
            'MessageModel',
            'SessionModel',
+           'ErrorModel',
+           'HTTPResponseModel',           
         ]

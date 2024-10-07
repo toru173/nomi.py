@@ -27,21 +27,20 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from nomi.requests.base_nomi_requests import BaseNomiRequests
-from nomi.api.nomi_api.nomi_api_session import NomiSession
+from nomi.api import NomiSession as Session
 from nomi.api.nomi_api.nomi_api_endpoints import *
 
 class NomiInformationRequests(BaseNomiRequests):
 
     _nomis_json_key = "nomis"
 
-    def __init__(self, session: NomiSession) -> None:
+    def __init__(self, session: Session) -> None:
         super().__init__(session)
         
     def get_all_nomis(self) -> dict:
-        response_json = self.session.do_request(endpoint = GET_ALL_NOMIS)
-        print(response_json)
-        if not self._nomis_json_key in response_json: raise RuntimeError("Unable to decode response from JSON")
-        return response_json[self._nomis_json_key]
+        response = self.do_request(endpoint = GET_ALL_NOMIS)
+        if not self._nomis_json_key in response.body: raise RuntimeError("Unable to decode response from JSON")
+        return response.body[self._nomis_json_key]
         
     def get_nomi_information(self, nomi_id: str = None) -> dict:
         if not isinstance(nomi_id, str):
@@ -51,5 +50,7 @@ class NomiInformationRequests(BaseNomiRequests):
             "nomi_id" : nomi_id
         }
 
-        response = self.session.do_request(endpoint = GET_NOMI_INFORMATION, url_parameters = url_parameters)
-        return response
+        response = self.do_request(endpoint = GET_NOMI_INFORMATION, url_parameters = url_parameters)
+
+        if "error" not in response.body.items():
+            return response.body

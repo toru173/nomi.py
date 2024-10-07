@@ -28,17 +28,24 @@
 
 from __future__ import annotations
 
-from typing import Union
+from typing import TypeVar, Type, Union
 import json
 
+T = TypeVar('T', bound='BaseModel')
+
+# This is similar to Python's dataclasses, but we want something a
+# bit more flexible
 class BaseModel:
-    def __init__(self, *args, **kwargs) -> None:
-        raise NotImplementedError
+    def __init__(self, json_dict: Union[dict, str]) -> None:
+        self._parse_json(json_dict)
+
+    @classmethod
+    def from_json(cls: Type[T], json_dict: dict) -> BaseModel:       
+        object = cls.__new__(cls)
+        object._parse_json(json_dict)
+        return object
     
-    def _parse_json(object: BaseModel, json_dict: Union[dict, str]) -> None:
-        if not isinstance(object, BaseModel):
-            raise TypeError(f"Expected object to be an instance of a BaseModel, got a {type(error)}")
-    
+    def _parse_json(self, json_dict: Union[dict, str]) -> None:
         if type(json_dict) is str:
             try:
                 json_dict = json.loads(json_dict)
@@ -48,8 +55,8 @@ class BaseModel:
         if not type(json_dict) is dict:
             raise TypeError(f"Expected json to be a dict, got a {type(json_dict)}")
 
-        for variable_name, key in object._json_keys.items():
+        for variable_name, key in self._json_keys.items():
             if key in json_dict:
-                setattr(object, f"_{variable_name}", json_dict[key])
+                setattr(self, f"_{variable_name}", json_dict[key])
             else:
                 raise RuntimeError(f"Unable to get {key} from JSON")

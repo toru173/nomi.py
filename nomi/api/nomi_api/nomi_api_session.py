@@ -31,16 +31,16 @@ from typing import Optional, Union, List, Any
 
 import json
 
-from nomi.api.base_api.base_api_session import BaseSession
+from nomi.api.base_api import BaseSession
 
 class NomiSession(BaseSession):
 
     _host = "api.nomi.ai"
 
-    def __init__(self, api_token: Optional[str] = None, use_webhook_for_all: bool = False, use_webhook_for_POST_PUT_DELETE: bool = False) -> None:
-        if api_token is not None and not isinstance(api_token, str): raise TypeError("api_token must be a str")
+    def __init__(self, api_key: Optional[str] = None, use_webhook_for_all: bool = False, use_webhook_for_POST_PUT_DELETE: bool = False) -> None:
+        if api_key is not None and not isinstance(api_key, str): raise TypeError("api_key must be a str")
         
-        self._api_token = api_token
+        self._api_key = api_key
         
         super().__init__(host = self._host,
                          use_webhook_for_all = use_webhook_for_all,
@@ -48,22 +48,26 @@ class NomiSession(BaseSession):
 
     def _get_default_headers(self) -> dict[str, str]:
         headers = super()._get_default_headers()
-        if self._api_token is None: raise TypeError("api_token cannot be None")
+        if self._api_key is None: raise TypeError("api_key cannot be None")
         
-        headers["Authorization"] = f"{self._api_token}"
+        headers["Authorization"] = f"{self._api_key}"
 
         return headers
     
     def _do_GET(self, url: str, headers: Optional[dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Union[dict, bytes, None]:
-        status, headers, body = super()._do_GET(url, headers, expected_status)
+        status, headers, body = super()._do_GET(url, headers)
+
+        headers = dict(headers)
 
         # Check for JSON in the response
-        content_type = dict(headers).get('Content-Type', '')
+        content_type = headers.get('Content-Type', '')
         if 'application/json' in content_type:
-            try: return json.loads(body)
-            except json.JSONDecodeError: raise RuntimeError("Unable to decode response from JSON")
-        else:
-            return body  
+            try:
+                body = json.loads(body)
+            except json.JSONDecodeError:
+                raise RuntimeError("Unable to decode response from JSON")
+        
+        return status, headers, body
     
     def _do_POST(self, url: str, headers: Optional[dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Union[dict, List[Any], bytes, None]:
         # In most cases we're sending JSON to the API, so default to that
@@ -71,15 +75,19 @@ class NomiSession(BaseSession):
             headers = self._get_default_headers()
             headers["Content-Type"] = "application/json"
                     
-        status, headers, body = super()._do_POST(url, headers, body, expected_status)
+        status, headers, body =  super()._do_POST(url, headers, body)
+
+        headers = dict(headers)
 
         # Check for JSON in the response
-        content_type = dict(headers).get('Content-Type', '')
+        content_type = headers.get('Content-Type', '')
         if 'application/json' in content_type:
-            try: return json.loads(body)
-            except json.JSONDecodeError: raise RuntimeError("Unable to decode response from JSON")
-        else:
-            return body    
+            try:
+                body = json.loads(body)
+            except json.JSONDecodeError:
+                raise RuntimeError("Unable to decode response from JSON")
+        
+        return status, headers, body
     
     def _do_PUT(self, url: str, headers: Optional[dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Union[dict, bytes, None]:
         # In most cases we're sending JSON to the API, so default to that
@@ -87,32 +95,40 @@ class NomiSession(BaseSession):
             headers = self._get_default_headers()
             headers["Content-Type"] = "application/json"
 
-        status, headers, body = super()._do_PUT(url, headers, body, expected_status)
+        status, headers, body =  super()._do_PUT(url, headers, body)
+
+        headers = dict(headers)
 
         # Check for JSON in the response
-        content_type = dict(headers).get('Content-Type', '')
+        content_type = headers.get('Content-Type', '')
         if 'application/json' in content_type:
-            try: return json.loads(body)
-            except json.JSONDecodeError: raise RuntimeError("Unable to decode response from JSON")
-        else:
-            return body
+            try:
+                body = json.loads(body)
+            except json.JSONDecodeError:
+                raise RuntimeError("Unable to decode response from JSON")
+        
+        return status, headers, body
 
     def _do_DELETE(self, url: str, headers: Optional[dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Union[dict, bytes, None]:
         status, headers, body = super()._do_DELETE(url, headers, expected_status)
 
+        headers = dict(headers)
+
         # Check for JSON in the response
-        content_type = dict(headers).get('Content-Type', '')
+        content_type = headers.get('Content-Type', '')
         if 'application/json' in content_type:
-            try: return json.loads(body)
-            except json.JSONDecodeError: raise RuntimeError("Unable to decode response from JSON")
-        else:
-            return body
+            try:
+                body = json.loads(body)
+            except json.JSONDecodeError:
+                raise RuntimeError("Unable to decode response from JSON")
+        
+        return status, headers, body
     
     def _do_file_upload(self, url: str, headers: Optional[dict[str, str]] = None, body: Optional[str] = None, expected_status: Optional[int] = None) -> Union[dict, bytes, None]:
         raise NotImplementedError("File upload is not implemented")
 
-    def _do_request(self, method: str, *args, **kwargs) -> Union[dict, bytes, None]:
-        return super()._do_request(method, *args, **kwargs)
+    # def _do_request(self, method: str, *args, **kwargs) -> Union[dict, bytes, None]:
+    #     return super()._do_request(method, *args, **kwargs)
 
     def do_request(self, endpoint: dict[str, any], url_parameters: Optional[dict[str, Any]] = None, payload: Optional[Any] = None) -> Union[dict, bytes, None]:
         return super().do_request(endpoint = endpoint, url_parameters = url_parameters, payload = payload)

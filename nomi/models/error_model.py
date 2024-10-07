@@ -32,15 +32,21 @@ from nomi.models.base_model import BaseModel
 
 class ErrorModel(BaseModel):
 
-    _issues_json_key = "issues"
+    _json_keys = {
+        "error" : "error",
+    }
+    
+    @property
+    def error(self) -> dict:
+        return self._error
+
+
+class IssuesModel(BaseModel):
 
     _json_keys = {
         "type" : "type",
-        "issues" : _issues_json_key,
+        "issues" : "issues",
     }
-
-    def __init__(self, *args, **kwargs):
-        raise RuntimeError("Use 'ErrorModel.from_json()' instead of directly calling __init__")
     
     @property
     def type(self) -> str:
@@ -49,9 +55,3 @@ class ErrorModel(BaseModel):
     @property
     def issues(self) -> str:
         return self._issues
-    
-    @classmethod
-    def from_json(cls, json: dict) -> ErrorModel:       
-        error = ErrorModel.__new__(cls)
-        error._parse_json(json)
-        return error

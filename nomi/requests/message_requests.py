@@ -29,7 +29,7 @@
 import json
 
 from nomi.requests.base_nomi_requests import BaseNomiRequests
-from nomi.api.nomi_api.nomi_api_session import NomiSession as Session
+from nomi.api import NomiSession as Session
 from nomi.api.nomi_api.nomi_api_endpoints import *
 
 class MessageRequests(BaseNomiRequests):
@@ -61,4 +61,6 @@ class MessageRequests(BaseNomiRequests):
             )
         except TypeError: raise RuntimeError("Unable to encode payload to JSON")
 
-        return self.session.do_request(endpoint = SEND_MESSAGE, url_parameters = url_parameters, payload = payload)
+        response = self.do_request(endpoint = SEND_MESSAGE, url_parameters = url_parameters, payload = payload)
+
+        return response.body

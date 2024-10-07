@@ -28,13 +28,13 @@
 
 from typing import Optional, List
 
-from nomi.api.nomi_api.nomi_api_session import NomiSession
-from nomi.requests.nomi_information_requests import NomiInformationRequests
-from nomi.models.nomi_model import NomiModel
+from nomi.api import NomiSession
+from nomi.requests import NomiInformationRequests
+from nomi.models import NomiModel
 
 class Session(NomiSession):
-    def __init__(self, api_token: Optional[str] = None, use_webhook_for_all: bool = False, use_webhook_for_POST_PUT_DELETE: bool = False) -> None:
-        super().__init__(api_token = api_token,
+    def __init__(self, api_key: Optional[str] = None, use_webhook_for_all: bool = False, use_webhook_for_POST_PUT_DELETE: bool = False) -> None:
+        super().__init__(api_key = api_key,
                          use_webhook_for_all = use_webhook_for_all,
                          use_webhook_for_POST_PUT_DELETE = use_webhook_for_POST_PUT_DELETE)
         
