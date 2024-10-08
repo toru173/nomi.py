@@ -53,7 +53,7 @@ class BaseModel:
                 raise RuntimeError("Unable to parse json to JSON")
 
         if not type(json_dict) is dict:
-            raise TypeError(f"Expected json to be a dict, got a {type(json_dict)}")
+            raise TypeError(f"Expected json to be a dict, got a {type(json_dict).__name__}")
 
         for variable_name, key in self._json_keys.items():
             if key in json_dict:

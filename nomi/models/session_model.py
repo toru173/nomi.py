@@ -32,7 +32,7 @@ from nomi.api import NomiSession as Session
 class SessionModel(BaseModel):
     def __init__(self, api_key: str) -> None:
         if not type(api_key) is str:
-            raise TypeError(f"Expected api_key to be a str, got a {type(api_key)}")
+            raise TypeError(f"Expected api_key to be a str, got a {type(api_key).__name__}")
 
         self._session = Session(api_key = api_key)
 
