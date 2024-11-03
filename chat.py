@@ -71,7 +71,7 @@ if __name__ == "__main__":
     print(f"Now chatting with {nomi_name}. Press ctrl+c to stop")
 
     # 2 Create a Nomi object
-    
+    nomi = Nomi.from_uuid(session = session, uuid = nomi_uuid)
 
     while True:
         message = input("User: ")
