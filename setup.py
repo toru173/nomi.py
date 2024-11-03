@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='nomi.py',
-    version='0.0.3',
+    name='nomi',
+    version='0.0.4',
     author='toru173',
     description='A Python module for interacting with the Nomi API',
     long_description=open('README.md').read(),
