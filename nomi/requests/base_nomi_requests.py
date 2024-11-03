@@ -67,15 +67,18 @@ class BaseNomiRequests:
             "body" : body,
         })
 
-        if "error" in response.body:
+        if "error" in response.body.keys():
             error_type = response.body.get("error").get("type")
             error_message = self._nomi_api_errors.get(error_type)
-            raise RuntimeError(error_message)        
+            if error_message is not None:
+                raise RuntimeError(error_message)
+            else:
+                raise RuntimeError(f"Unexpected error:\n{response.body}")
 
         expected_status = endpoint.get("expected_status")
 
         if status != expected_status:
-            raise BaseNomiError(f"Unexpected response from API. Expected {expected_status}, got {status}")
+            raise BaseNomiError(f"Unexpected response from API. Expected {expected_status}, got {status}\nResponse body:\n{response.body}")
 
         return response
     
