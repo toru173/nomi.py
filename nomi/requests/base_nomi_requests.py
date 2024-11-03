@@ -36,6 +36,7 @@ class BaseNomiRequests:
 
     _nomi_api_errors = {
         "InvalidAPIKey" : "There is an issue with your API key",
+        "Unauthorized" : "There is an issue with your API key",
         "NomiNotFound" : "The specified Nomi was not found. It may not exist or may not be associated with this account.",
         "InvalidRouteParams" : "The id parameter is not a valid UUID.",
         "InvalidContentType" : "The Content-Type header is not application/json.",
