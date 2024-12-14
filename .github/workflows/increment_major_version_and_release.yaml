@@ -1,0 +1,67 @@
+name: Increment 'major' version and Create Release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  increment_major:
+    name: Increment Major Version
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Fetch the latest release
+      - name: Get Latest Release Tag
+        id: get_latest_release
+        run: |
+
+          # Query the repo for the latest version
+          LATEST_TAG=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r .tag_name)
+
+          echo "Latest tag: $LATEST_TAG"
+          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_OUTPUT
+
+      # Increment 'major' version
+      - name: Increment Major
+        id: increment_version
+        run: |
+
+          # Get the current version
+          VERSION=${{ steps.get_latest_release.outputs.LATEST_TAG }}
+
+          if [[ "$VERSION" == "null" ]]; then
+              NEW_VERSION="v1.0.0"
+          else
+              # Extract major, minor, and incremental parts
+              MAJOR=$(echo $VERSION | cut -d. -f1 | sed 's/v//')
+              MINOR=$(echo $VERSION | cut -d. -f2)
+              INCREMENTAL=$(echo $VERSION | cut -d. -f3)
+
+              # Increment the major part
+              NEW_MAJOR=$((MAJOR + 1))
+              NEW_VERSION="v${NEW_MAJOR}.0.0"
+          fi
+
+          echo "New version will be $NEW_VERSION"
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_OUTPUTS
+
+      # Create a release
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "${{ steps.increment_version.outputs.NEW_VERSION }}"
+          tag_name: ${{ steps.increment_version.outputs.NEW_VERSION }}
+          make_latest: true
+          body: "Download the latest version here 🥰"
+          files: |
+            LICENSE
+            install
+            release_assets/install.zip

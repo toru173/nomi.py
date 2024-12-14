@@ -1,0 +1,104 @@
+name: Create Release in Production Repository
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sync:
+    name: Create Release in Production Repository
+    runs-on: ubuntu-latest
+    env:
+        README: "README.md"
+        RELEASE_IGNORE: ".releaseignore"
+        INSTALL: "install"
+        UPDATE: "update/update"
+
+
+    steps:
+      # Checkout the development repo
+      - name: Checkout Development Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Initialize submodules
+        run: git submodule update --init --recursive
+
+      - name: Set up SSH
+        run: mkdir -p ~/.ssh
+
+      - name: Get SSH Key for Authentication
+        run: |
+
+          # Get authentication SSH Key from secrets
+          echo "${{ secrets.MYA_AUTHENTICATION_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - name: Get SSH Key for Signing
+        run: |
+
+          # Get signing SSH Key from secrets
+          echo "${{ secrets.MYA_SIGNING_SSH_KEY }}" > ~/.ssh/id_ed25519_signing
+          chmod 600 ~/.ssh/id_ed25519_signing
+          git config --global gpg.format ssh
+          git config --global user.signingkey "~/.ssh/id_ed25519_signing"
+
+      # Clone the Production Repository
+      - name: Clone Production Repository
+        run: git clone git@github.com:myakirimiya/nomi-py.git prod/
+
+      # Copy the Development repository to the Production repository.
+      # Here we basically nuke everything in prod except .git, and
+      # replace it with the contents of dev
+      - name: Clean Production Repository
+        run: |
+
+          # Find files that aren't the .git folder, and delete
+          find prod/ -mindepth 1 -not -path "prod/.git" -not -path "prod/.git/*" -exec rm -rf {} +
+          # Copy over everything except the .git folder
+          rsync -ah --exclude='.git' --exclude='prod' ./ prod/
+
+      # Prepare the Production Repository for Release
+      - name: Prepare for Release
+        run: |
+
+          # Prepare files to commit to the Production Repository
+          # Remove warning from readme
+          sed -i '3,4d' "prod/$README"
+          sed -i '/^$/N;/^\n$/D' "prod/$README"
+
+          FILES=("$README" "$INSTALL" "$UPDATE")
+
+          # Replace URLs from dev repo with URLs from prod repo
+          for FILE in "${FILES[@]}"; do
+              if [[ ! -f "$FILE" ]]; then
+                  echo "Unable to find $FILE"
+                  exit 1
+              fi
+              sed -i 's|https://github.com/toru173/nomi-py-development|https://github.com/myakirimiya/nomi-py|g' "prod/$FILE"
+          done
+
+          if [[ -f "$RELEASE_IGNORE" ]]; then
+              while IFS= read -r PATTERN; do
+                  if [ -n "$PATTERN" ]; then
+                      find prod/ -path "prod/$PATTERN" -exec rm -rf {} +
+                  fi
+              done < "$RELEASE_IGNORE"
+          else
+              echo "$RELEASE_IGNORE file not found."
+              echo "⚠️ WARNING ⚠️ All files will be pushed to Production"
+          fi
+
+      # Commit and Push Changes to Production Repo
+      - name: Commit and Push Changes
+        run: |
+
+          # Let's push to prod 🚀🚀🚀
+          cd prod
+          git config --global user.name "Mya Kirimiya"
+          git config --global user.email "mya.kirimiya@gmail.com"
+          git config --global commit.gpgsign true
+          git add .
+          git commit -m "Getting the latest updates from toru173..."
+          git push
